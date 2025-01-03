@@ -21,7 +21,17 @@ const types = document.getElementById("types");
 
 const fetchPokemons = () => {
   /*Fetch all pokemons here*/
+  const pokemonURL = "https://pokeapi.co/api/v2/pokemon/";
+  fetch(pokemonURL)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data.results);
+    });
 };
+
+// fetchPokemons();
 
 // 2) a) As you can see, we get some metadata as well as
 //    the results of the fetch. Change the console.log so
@@ -45,9 +55,45 @@ const fetchPokemons = () => {
 //    function (change the function's name to fit your pokemon).
 //    Log the data in the console and see what you find.
 
-const fetchBulbasaurData = () => {
+const fetchHaunterData = () => {
   /*Fetch singular pokemon here*/
+  const pokemonURL = "https://pokeapi.co/api/v2/pokemon/?limit=200";
+  fetch(pokemonURL)
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      data.results.forEach((pokemon) => {
+        // console.log(pokemon.name);
+        if (pokemon.name === "haunter") {
+          const haunterAPI = pokemon.url;
+          fetch(haunterAPI)
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              let pokemonImg = data.sprites.front_shiny;
+              let pokemonName = data.name;
+              let pokemonHeight = data.height;
+              let pokemonWeight = data.weight;
+
+              image.src = pokemonImg;
+              name.innerHTML = pokemonName.toUpperCase();
+              height.innerHTML = pokemonHeight;
+              weight.innerHTML = pokemonWeight;
+              types.innerHTML = "";
+
+              data.types.forEach((type) => {
+                types.innerHTML += `${type.type.name.toUpperCase()} <br>`;
+                console.log(type.type.name);
+              });
+            });
+        }
+      });
+    });
 };
+
+fetchHaunterData();
 
 // 5) After familiarizing with the data, we will use the data
 //    to change our table. We will give you the image as a start.
